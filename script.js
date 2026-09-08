@@ -61,7 +61,7 @@
         <article>
           <span>${haber.type || "Haber"}</span>
           <h3>${haber["Başlık"] || ""}</h3>
-         <p>${haber.summary || haber.content || ""}</p>
+         <p>${haber["Özet"] || haber["İçerik"] || ""}</p>
           <time>${tarih}</time>
         </article>
       `;
