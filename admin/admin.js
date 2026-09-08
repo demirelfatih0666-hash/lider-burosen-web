@@ -1,0 +1,18 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyCyDO-VfmmLRrc1KS8SaVcaIR94pnc5M4g",authDomain:"lider-burosen-web.firebaseapp.com",projectId:"lider-burosen-web",storageBucket:"lider-burosen-web.firebasestorage.app",messagingSenderId:"883869377747",appId:"1:883869377747:web:90AE255db06aad942FA026"};
+const ADMIN_UID="BBNaiOdZLebx3p3f4pltPstf7gy1";
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id); let editingId=null;
+
+$('loginBtn').onclick=async()=>{try{$('loginMsg').textContent='Giriş yapılıyor...';const c=await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);if(c.user.uid!==ADMIN_UID){await signOut(auth);throw new Error('Bu hesap yönetici olarak yetkili değil.')} $('loginMsg').textContent='';}catch(e){$('loginMsg').textContent='Giriş başarısız: '+e.message;}};
+$('logoutBtn').onclick=()=>signOut(auth);
+onAuthStateChanged(auth,u=>{const ok=u&&u.uid===ADMIN_UID;$('login').classList.toggle('hidden',ok);$('panel').classList.toggle('hidden',!ok);if(ok)listen();});
+
+function clearForm(){editingId=null;$('formTitle').textContent='Yeni İçerik';$('title').value='';$('summary').value='';$('content').value='';$('type').value='haber';$('published').checked=true;$('cancelBtn').classList.add('hidden');}
+$('cancelBtn').onclick=clearForm;
+$('saveBtn').onclick=async()=>{if(!auth.currentUser||auth.currentUser.uid!==ADMIN_UID)return;const data={title:$('title').value.trim(),summary:$('summary').value.trim(),content:$('content').value.trim(),type:$('type').value,published:$('published').checked,updatedAt:serverTimestamp()};if(!data.title){$('formMsg').textContent='Başlık gerekli.';return;}try{if(editingId)await updateDoc(doc(db,'icerikler',editingId),data);else await addDoc(collection(db,'icerikler'),{...data,createdAt:serverTimestamp()});$('formMsg').textContent='Kaydedildi.';clearForm();}catch(e){$('formMsg').textContent='Hata: '+e.message;}};
+function listen(){const q=query(collection(db,'icerikler'),orderBy('createdAt','desc'));onSnapshot(q,s=>{const box=$('items');box.innerHTML='';if(s.empty){box.textContent='Henüz içerik yok.';return;}s.forEach(d=>{const x=d.data(),el=document.createElement('div');el.className='item';el.innerHTML=`<h3>${esc(x.title||'')}</h3><small>${x.type==='duyuru'?'Duyuru':'Haber'} • ${x.published?'Yayında':'Taslak'}</small><p>${esc(x.summary||'')}</p><div class="item-buttons"><button class="edit">Düzenle</button><button class="danger del">Sil</button></div>`;el.querySelector('.edit').onclick=()=>{editingId=d.id;$('formTitle').textContent='İçeriği Düzenle';$('title').value=x.title||'';$('summary').value=x.summary||'';$('content').value=x.content||'';$('type').value=x.type||'haber';$('published').checked=x.published!==false;$('cancelBtn').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});};el.querySelector('.del').onclick=async()=>{if(confirm('Bu içeriği silmek istiyor musunuz?'))await deleteDoc(doc(db,'icerikler',d.id));};box.appendChild(el);});},e=>{$('items').textContent='İçerikler yüklenemedi: '+e.message;});}
+function esc(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
