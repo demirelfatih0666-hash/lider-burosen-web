@@ -20,21 +20,24 @@
   const db = getFirestore(app);
 
   const haberKutusu = document.querySelector("#haberler .cards");
-
   if (!haberKutusu) return;
 
   onSnapshot(collection(db, "icerikler"), (snapshot) => {
     const haberler = snapshot.docs
       .map((doc) => doc.data())
-      .filter((haber) => haber["Yayınlandı"] === true)
+      .filter((haber) =>
+        haber["Yayınlandı"] === true || haber.published === true
+      )
       .sort((a, b) => {
-        const tarihA = a["oluşturulduAt"].toMillis
-          ? a["oluşturulduAt"].toMillis()
-          : 0;
+        const tarihA =
+          a["oluşturulduAt"]?.toMillis?.() ||
+          a.createdAt?.toMillis?.() ||
+          0;
 
-        const tarihB =b["oluşturulduAt"] ?.toMillis
-          ?b["oluşturulduAt"].toMillis()
-          : 0;
+        const tarihB =
+          b["oluşturulduAt"]?.toMillis?.() ||
+          b.createdAt?.toMillis?.() ||
+          0;
 
         return tarihB - tarihA;
       });
@@ -53,20 +56,41 @@
     haberKutusu.innerHTML = "";
 
     haberler.slice(0, 6).forEach((haber) => {
-      const tarih = haber["oluşturulduAt"]?.toDate
-        ? haber["oluşturulduAt"].toDate().toLocaleDateString("tr-TR")
+      const zaman =
+        haber["oluşturulduAt"] ||
+        haber.createdAt;
+
+      const tarih = zaman?.toDate
+        ? zaman.toDate().toLocaleDateString("tr-TR")
         : "";
+
+      const tip = haber["Tip"] || haber.type || "Haber";
+      const baslik = haber["Başlık"] || haber.title || "";
+      const ozet =
+        haber["Özet"] ||
+        haber.summary ||
+        haber["İçerik"] ||
+        haber.content ||
+        "";
 
       haberKutusu.innerHTML += `
         <article>
-          <span>${ haber["Tip"]|| "Haber"}</span>
-          <h3>${haber["Başlık"] || ""}</h3>
-         <p>${haber["Özet"] || haber["İçerik"] || ""}</p>
+          <span>${tip}</span>
+          <h3>${baslik}</h3>
+          <p>${ozet}</p>
           <time>${tarih}</time>
         </article>
       `;
     });
   }, (error) => {
     console.error("Firebase bağlantı hatası:", error);
+
+    haberKutusu.innerHTML = `
+      <article>
+        <span>Hata</span>
+        <h3>Haberler yüklenemedi</h3>
+        <p>${error.message}</p>
+      </article>
+    `;
   });
 })();
