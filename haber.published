@@ -28,12 +28,12 @@
       .map((doc) => doc.data())
       .filter((haber) => haber["Yayınlandı"] === true)
       .sort((a, b) => {
-        const tarihA = a.createdAt?.toMillis
-          ? a.createdAt.toMillis()
+        const tarihA = a["oluşturulduAt"].toMillis
+          ? a["oluşturulduAt"].toMillis()
           : 0;
 
-        const tarihB = b.createdAt?.toMillis
-          ? b.createdAt.toMillis()
+        const tarihB =b["oluşturulduAt"] ?.toMillis
+          ?b["oluşturulduAt"].toMillis()
           : 0;
 
         return tarihB - tarihA;
