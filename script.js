@@ -28,12 +28,12 @@
       .map((doc) => doc.data())
       .filter((haber) => haber.published === true)
       .sort((a, b) => {
-        const tarihA = a.oluşturulduAt?.toMillis
-          ? a.oluşturulduAt.toMillis()
+        const tarihA = a.createdAt?.toMillis
+          ? a.createdAt.toMillis()
           : 0;
 
-        const tarihB = b.oluşturulduAt?.toMillis
-          ? b.oluşturulduAt.toMillis()
+        const tarihB = b.createdAt?.toMillis
+          ? b.createdAt.toMillis()
           : 0;
 
         return tarihB - tarihA;
@@ -53,8 +53,8 @@
     haberKutusu.innerHTML = "";
 
     haberler.slice(0, 6).forEach((haber) => {
-      const tarih = haber.oluşturulduAt?.toDate
-        ? haber.oluşturulduAt.toDate().toLocaleDateString("tr-TR")
+      const tarih = haber.createdAt?.toDate
+        ? haber.createdAt.toDate().toLocaleDateString("tr-TR")
         : "";
 
       haberKutusu.innerHTML += `
