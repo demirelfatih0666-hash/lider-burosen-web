@@ -26,8 +26,8 @@
 
   const q = query(
     collection(db, "icerikler"),
-    where("Yayınlandı", "==", true),
-    orderBy("oluşturulduAt", "desc")
+    where("published", "==", true),
+    orderBy("createdAt", "desc")
   );
 
   onSnapshot(q, (snapshot) => {
@@ -47,20 +47,18 @@
     snapshot.docs.slice(0, 6).forEach((doc) => {
       const haber = doc.data();
 
-      const tarih = haber.oluşturulduAt?.toDate
-        ? haber.oluşturulduAt.toDate().toLocaleDateString("tr-TR")
+      const tarih = haber.createdAt?.toDate
+        ? haber.createdAt.toDate().toLocaleDateString("tr-TR")
         : "";
 
       haberKutusu.innerHTML += `
         <article>
-          <span>${haber.Tip || "Haber"}</span>
-          <h3>${haber.Başlık || ""}</h3>
-          <p>${haber.Özet || haber.İçerik || ""}</p>
+          <span>${haber.type === "duyuru" ? "Duyuru" : "Haber"}</span>
+          <h3>${haber.title || ""}</h3>
+          <p>${haber.summary || haber.content || ""}</p>
           <time>${tarih}</time>
         </article>
       `;
     });
-  }, (error) => {
-    console.error("Firebase içerik hatası:", error);
   });
 })();
