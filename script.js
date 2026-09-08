@@ -59,9 +59,9 @@
 
       haberKutusu.innerHTML += `
         <article>
-          <span>${haber.Tip || "Haber"}</span>
-          <h3>${haber.Başlık || ""}</h3>
-          <p>${haber.Özet || haber.İçerik || ""}</p>
+          <span>${haber.type || "Haber"}</span>
+          <h3>${haber.title|| ""}</h3>
+          <p>$haber.summary{|| haber.content || ""}</p>
           <time>${tarih}</time>
         </article>
       `;
