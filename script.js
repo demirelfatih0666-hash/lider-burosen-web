@@ -26,7 +26,7 @@
   onSnapshot(collection(db, "icerikler"), (snapshot) => {
     const haberler = snapshot.docs
       .map((doc) => doc.data())
-      .filter((haber) => haber.Yayınlandı === true)
+      .filter((haber) => haber.published === true)
       .sort((a, b) => {
         const tarihA = a.oluşturulduAt?.toMillis
           ? a.oluşturulduAt.toMillis()
