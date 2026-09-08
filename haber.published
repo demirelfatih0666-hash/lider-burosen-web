@@ -53,8 +53,8 @@
     haberKutusu.innerHTML = "";
 
     haberler.slice(0, 6).forEach((haber) => {
-      const tarih = haber.createdAt?.toDate
-        ? haber.createdAt.toDate().toLocaleDateString("tr-TR")
+      const tarih = haber["oluşturulduAt"]?.toDate
+        ? haber["oluşturulduAt"].toDate().toLocaleDateString("tr-TR")
         : "";
 
       haberKutusu.innerHTML += `
