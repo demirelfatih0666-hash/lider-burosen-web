@@ -24,14 +24,30 @@
 
   onSnapshot(collection(db, "icerikler"), (snapshot) => {
     const haberler = snapshot.docs
-      .map((doc) => doc.data())
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+      }))
       .filter((haber) =>
         haber["Yayınlandı"] === true || haber.published === true
-      );
+      )
+      .sort((a, b) => {
+        const tarihA =
+          a["oluşturulduAt"]?.toMillis?.() ||
+          a.createdAt?.toMillis?.() ||
+          0;
+
+        const tarihB =
+          b["oluşturulduAt"]?.toMillis?.() ||
+          b.createdAt?.toMillis?.() ||
+          0;
+
+        return tarihB - tarihA;
+      });
 
     haberKutusu.innerHTML = "";
 
-    haberler.forEach((haber) => {
+    haberler.slice(0, 6).forEach((haber) => {
       const tip = haber["Tip"] || haber.type || "Haber";
       const baslik = haber["Başlık"] || haber.title || "";
       const ozet =
@@ -42,6 +58,7 @@
         "";
 
       const zaman = haber["oluşturulduAt"] || haber.createdAt;
+
       const tarih = zaman?.toDate
         ? zaman.toDate().toLocaleDateString("tr-TR")
         : "";
@@ -52,6 +69,8 @@
           <h3>${baslik}</h3>
           <p>${ozet}</p>
           <time>${tarih}</time>
+          <br>
+          <a href="haber.html?id=${haber.id}">Haberi Oku →</a>
         </article>
       `;
     });
