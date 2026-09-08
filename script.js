@@ -27,43 +27,11 @@
       .map((doc) => doc.data())
       .filter((haber) =>
         haber["Yayınlandı"] === true || haber.published === true
-      )
-      .sort((a, b) => {
-        const tarihA =
-          a["oluşturulduAt"]?.toMillis?.() ||
-          a.createdAt?.toMillis?.() ||
-          0;
-
-        const tarihB =
-          b["oluşturulduAt"]?.toMillis?.() ||
-          b.createdAt?.toMillis?.() ||
-          0;
-
-        return tarihB - tarihA;
-      });
-
-    if (haberler.length === 0) {
-      haberKutusu.innerHTML = `
-        <article>
-          <span>Bilgi</span>
-          <h3>Henüz yayımlanmış içerik yok</h3>
-          <p>Yeni haber ve duyurular burada yayımlanacaktır.</p>
-        </article>
-      `;
-      return;
-    }
+      );
 
     haberKutusu.innerHTML = "";
 
-    haberler.slice(0, 6).forEach((haber) => {
-      const zaman =
-        haber["oluşturulduAt"] ||
-        haber.createdAt;
-
-      const tarih = zaman?.toDate
-        ? zaman.toDate().toLocaleDateString("tr-TR")
-        : "";
-
+    haberler.forEach((haber) => {
       const tip = haber["Tip"] || haber.type || "Haber";
       const baslik = haber["Başlık"] || haber.title || "";
       const ozet =
@@ -72,6 +40,11 @@
         haber["İçerik"] ||
         haber.content ||
         "";
+
+      const zaman = haber["oluşturulduAt"] || haber.createdAt;
+      const tarih = zaman?.toDate
+        ? zaman.toDate().toLocaleDateString("tr-TR")
+        : "";
 
       haberKutusu.innerHTML += `
         <article>
@@ -82,13 +55,20 @@
         </article>
       `;
     });
-  }, (error) => {
-    console.error("Firebase bağlantı hatası:", error);
 
+    if (haberler.length === 0) {
+      haberKutusu.innerHTML = `
+        <article>
+          <span>Bilgi</span>
+          <h3>Henüz yayımlanmış içerik yok</h3>
+        </article>
+      `;
+    }
+  }, (error) => {
     haberKutusu.innerHTML = `
       <article>
         <span>Hata</span>
-        <h3>Haberler yüklenemedi</h3>
+        <h3>Firebase bağlantı hatası</h3>
         <p>${error.message}</p>
       </article>
     `;
