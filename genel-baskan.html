@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genel Başkan | Lider Büro-Sen</title>
+  <meta name="description" content="Lider Büro-Sen Genel Başkan sayfası ve sendikal mücadele mesajı.">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f6f7;
+      color: #222;
+      line-height: 1.7;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    .top {
+      background: #8b1118;
+      color: white;
+      padding: 14px 0;
+    }
+
+    .top-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .top a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #650b10, #a81922);
+      color: white;
+      padding: 65px 0;
+    }
+
+    .hero small {
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero h1 {
+      margin: 8px 0 0;
+      font-size: 45px;
+    }
+
+    .president {
+      padding: 65px 0;
+    }
+
+    .president-grid {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 50px;
+      align-items: start;
+    }
+
+    .photo {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0,0,0,.10);
+    }
+
+    .photo img {
+      width: 100%;
+      min-height: 390px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-info {
+      padding: 22px;
+      text-align: center;
+    }
+
+    .photo-info h2 {
+      color: #8b1118;
+      margin: 0 0 5px;
+    }
+
+    .message {
+      background: white;
+      padding: 38px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.07);
+    }
+
+    .message h2 {
+      color: #8b1118;
+      font-size: 30px;
+      margin-top: 0;
+    }
+
+    .quote {
+      border-left: 5px solid #8b1118;
+      padding: 15px 20px;
+      margin: 25px 0;
+      background: #faf2f2;
+      font-weight: bold;
+      font-size: 19px;
+    }
+
+    footer {
+      background: #181818;
+      color: #bbb;
+      text-align: center;
+      padding: 25px 0;
+    }
+
+    @media (max-width: 750px) {
+      .president-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="top">
+    <div class="container top-inner">
+      <strong>LİDER BÜRO-SEN</strong>
+      <a href="index.html">← Ana Sayfaya Dön</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="container">
+      <small>Kurumsal</small>
+      <h1>Genel Başkan</h1>
+    </div>
+  </section>
+
+  <main class="president">
+    <div class="container president-grid">
+
+      <div class="photo">
+        <img src="gorseller/genel-baskan.jpg"
+             alt="Lider Büro-Sen Genel Başkanı">
+
+        <div class="photo-info">
+          <h2>Genel Başkan</h2>
+          <div>Lider Büro-Sen</div>
+        </div>
+      </div>
+
+      <article class="message">
+        <h2>Genel Başkan'dan</h2>
+
+        <p>Değerli üyelerimiz ve kıymetli çalışma arkadaşlarımız,</p>
+
+        <p>
+          Lider Büro-Sen olarak temel hedefimiz; çalışanlarımızın
+          ekonomik, sosyal ve özlük haklarının korunması ve
+          geliştirilmesi için güçlü bir sendikal mücadele ortaya
+          koymaktır.
+        </p>
+
+        <div class="quote">
+          “Gücümüz birlikteliğimizden, mücadelemiz emeğimizden gelir.”
+        </div>
+
+        <p>
+          Çalışma hayatında adaletin, liyakatin ve eşitliğin
+          güçlenmesi; üyelerimizin karşılaştığı sorunlara etkin
+          çözümler üretilmesi için çalışmalarımızı kararlılıkla
+          sürdüreceğiz.
+        </p>
+
+        <p>
+          Sendikamızı büyüten en önemli güç üyelerimizin güveni,
+          dayanışması ve ortak mücadelesidir. Her üyemizin sesinin
+          duyulduğu, çalışanların haklarının güçlü biçimde
+          savunulduğu bir sendikal anlayışla yolumuza devam edeceğiz.
+        </p>
+
+        <p>
+          Birlikte daha güçlü, birlikte daha kararlıyız.
+        </p>
+      </article>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Lider Büro-Sen • Tüm hakları saklıdır.
+    </div>
+  </footer>
+
+</body>
+</html>
