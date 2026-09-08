@@ -20,26 +20,14 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  function escapeHtml(value) {
-    return String(value || "").replace(/[&<>'"]/g, function (c) {
-      return {
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        "'": "&#39;",
-        '"': "&quot;"
-      }[c];
-    });
-  }
-
   const haberKutusu = document.querySelector("#haberler .cards");
 
   if (!haberKutusu) return;
 
   const q = query(
     collection(db, "icerikler"),
-    where("published", "==", true),
-    orderBy("createdAt", "desc")
+    where("Yayınlandı", "==", true),
+    orderBy("oluşturulduAt", "desc")
   );
 
   onSnapshot(q, (snapshot) => {
@@ -59,15 +47,15 @@
     snapshot.docs.slice(0, 6).forEach((doc) => {
       const haber = doc.data();
 
-      const tarih = haber.createdAt?.toDate
-        ? haber.createdAt.toDate().toLocaleDateString("tr-TR")
+      const tarih = haber.oluşturulduAt?.toDate
+        ? haber.oluşturulduAt.toDate().toLocaleDateString("tr-TR")
         : "";
 
       haberKutusu.innerHTML += `
         <article>
-          <span>${haber.type === "duyuru" ? "Duyuru" : "Haber"}</span>
-          <h3>${escapeHtml(haber.title)}</h3>
-          <p>${escapeHtml(haber.summary || haber.content)}</p>
+          <span>${haber.Tip || "Haber"}</span>
+          <h3>${haber.Başlık || ""}</h3>
+          <p>${haber.Özet || haber.İçerik || ""}</p>
           <time>${tarih}</time>
         </article>
       `;
