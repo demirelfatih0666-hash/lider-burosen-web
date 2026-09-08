@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haber | Lider Büro-Sen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <div class="container">
+    <h1>Lider Büro-Sen</h1>
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section style="padding:40px 0;">
+    <article id="haberDetay">
+      <p>Haber yükleniyor...</p>
+    </article>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>© Lider Büro-Sen</p>
+  </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+  import {
+    getFirestore,
+    doc,
+    getDoc
+  } from
+    "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCyDO-VfmmLRrc1KS8SaVcaIR94pnc5M4g",
+    authDomain: "lider-burosen-web.firebaseapp.com",
+    projectId: "lider-burosen-web",
+    storageBucket: "lider-burosen-web.firebasestorage.app",
+    messagingSenderId: "883869377747",
+    appId: "1:883869377747:web:90AE255db06aad942FA026"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const alan = document.getElementById("haberDetay");
+  const params = new URLSearchParams(window.location.search);
+  const haberId = params.get("id");
+
+  async function haberiGetir() {
+
+    if (!haberId) {
+      alan.innerHTML = "<h2>Haber bulunamadı.</h2>";
+      return;
+    }
+
+    try {
+
+      const belge = await getDoc(
+        doc(db, "icerikler", haberId)
+      );
+
+      if (!belge.exists()) {
+        alan.innerHTML = "<h2>Haber bulunamadı.</h2>";
+        return;
+      }
+
+      const haber = belge.data();
+
+      const yayinlandi =
+        haber["Yayınlandı"] === true ||
+        haber.published === true;
+
+      if (!yayinlandi) {
+        alan.innerHTML = "<h2>Bu haber yayında değil.</h2>";
+        return;
+      }
+
+      const tip =
+        haber["Tip"] ||
+        haber.type ||
+        "Haber";
+
+      const baslik =
+        haber["Başlık"] ||
+        haber.title ||
+        "";
+
+      const ozet =
+        haber["Özet"] ||
+        haber.summary ||
+        "";
+
+      const icerik =
+        haber["İçerik"] ||
+        haber.content ||
+        ozet;
+
+      const zaman =
+        haber["oluşturulduAt"] ||
+        haber.createdAt;
+
+      const tarih = zaman?.toDate
+        ? zaman.toDate().toLocaleDateString("tr-TR")
+        : "";
+
+      document.title =
+        baslik + " | Lider Büro-Sen";
+
+      alan.innerHTML = `
+        <span>${tip}</span>
+
+        <h1>${baslik}</h1>
+
+        <p><strong>${ozet}</strong></p>
+
+        <p>${icerik}</p>
+
+        <time>${tarih}</time>
+
+        <hr>
+
+        <p>
+          <a href="index.html">← Ana sayfaya dön</a>
+        </p>
+      `;
+
+    } catch (error) {
+
+      alan.innerHTML = `
+        <h2>Haber yüklenemedi</h2>
+        <p>${error.message}</p>
+      `;
+
+    }
+  }
+
+  haberiGetir();
+</script>
+
+</body>
+</html>
