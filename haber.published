@@ -59,7 +59,7 @@
 
       haberKutusu.innerHTML += `
         <article>
-          <span>${haber.type || "Haber"}</span>
+          <span>${ haber["Tip"]|| "Haber"}</span>
           <h3>${haber["Başlık"] || ""}</h3>
          <p>${haber["Özet"] || haber["İçerik"] || ""}</p>
           <time>${tarih}</time>
