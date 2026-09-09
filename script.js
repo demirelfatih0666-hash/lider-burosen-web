@@ -3,7 +3,11 @@
     "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js"
   );
 
-  const { getFirestore, collection, onSnapshot } = await import(
+  const {
+    getFirestore,
+    collection,
+    onSnapshot
+  } = await import(
     "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js"
   );
 
@@ -19,77 +23,162 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  /* HABERLER */
+
   const haberKutusu = document.querySelector("#haberler .cards");
-  if (!haberKutusu) return;
 
-  onSnapshot(collection(db, "icerikler"), (snapshot) => {
-    const haberler = snapshot.docs
-      .map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-      .filter((haber) =>
-        haber["Yayınlandı"] === true || haber.published === true
-      )
-      .sort((a, b) => {
-        const tarihA =
-          a["oluşturulduAt"]?.toMillis?.() ||
-          a.createdAt?.toMillis?.() ||
-          0;
+  if (haberKutusu) {
+    onSnapshot(
+      collection(db, "icerikler"),
+      (snapshot) => {
+        const haberler = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          .filter(
+            (haber) =>
+              haber["Yayınlandı"] === true ||
+              haber.published === true
+          )
+          .sort((a, b) => {
+            const tarihA =
+              a["oluşturulduAt"]?.toMillis?.() ||
+              a.createdAt?.toMillis?.() ||
+              0;
 
-        const tarihB =
-          b["oluşturulduAt"]?.toMillis?.() ||
-          b.createdAt?.toMillis?.() ||
-          0;
+            const tarihB =
+              b["oluşturulduAt"]?.toMillis?.() ||
+              b.createdAt?.toMillis?.() ||
+              0;
 
-        return tarihB - tarihA;
-      });
+            return tarihB - tarihA;
+          });
 
-    haberKutusu.innerHTML = "";
+        haberKutusu.innerHTML = "";
 
-    haberler.slice(0, 6).forEach((haber) => {
-      const tip = haber["Tip"] || haber.type || "Haber";
-      const baslik = haber["Başlık"] || haber.title || "";
-      const ozet =
-        haber["Özet"] ||
-        haber.summary ||
-        haber["İçerik"] ||
-        haber.content ||
-        "";
+        haberler.slice(0, 6).forEach((haber) => {
+          const tip =
+            haber["Tip"] ||
+            haber.type ||
+            "Haber";
 
-      const zaman = haber["oluşturulduAt"] || haber.createdAt;
+          const baslik =
+            haber["Başlık"] ||
+            haber.title ||
+            "";
 
-      const tarih = zaman?.toDate
-        ? zaman.toDate().toLocaleDateString("tr-TR")
-        : "";
+          const ozet =
+            haber["Özet"] ||
+            haber.summary ||
+            haber["İçerik"] ||
+            haber.content ||
+            "";
 
-      haberKutusu.innerHTML += `
-        <article>
-          <span>${tip}</span>
-          <h3>${baslik}</h3>
-          <p>${ozet}</p>
-          <time>${tarih}</time>
-          <br>
-          <a href="haber.html?id=${haber.id}">Haberi Oku →</a>
-        </article>
-      `;
-    });
+          const zaman =
+            haber["oluşturulduAt"] ||
+            haber.createdAt;
 
-    if (haberler.length === 0) {
-      haberKutusu.innerHTML = `
-        <article>
-          <span>Bilgi</span>
-          <h3>Henüz yayımlanmış içerik yok</h3>
-        </article>
-      `;
-    }
-  }, (error) => {
-    haberKutusu.innerHTML = `
-      <article>
-        <span>Hata</span>
-        <h3>Firebase bağlantı hatası</h3>
-        <p>${error.message}</p>
-      </article>
-    `;
-  });
+          const tarih = zaman?.toDate
+            ? zaman.toDate().toLocaleDateString("tr-TR")
+            : "";
+
+          haberKutusu.innerHTML += `
+            <article>
+              <span>${tip}</span>
+              <h3>${baslik}</h3>
+              <p>${ozet}</p>
+              <time>${tarih}</time>
+              <br>
+              <a href="haber.html?id=${haber.id}">
+                Haberi Oku →
+              </a>
+            </article>
+          `;
+        });
+
+        if (haberler.length === 0) {
+          haberKutusu.innerHTML = `
+            <article>
+              <span>Bilgi</span>
+              <h3>Henüz yayımlanmış içerik yok</h3>
+            </article>
+          `;
+        }
+      },
+      (error) => {
+        haberKutusu.innerHTML = `
+          <article>
+            <span>Hata</span>
+            <h3>Firebase bağlantı hatası</h3>
+            <p>${error.message}</p>
+          </article>
+        `;
+      }
+    );
+  }
+
+  /* YÖNETİM */
+
+  const yonetimKutusu =
+    document.querySelector(".management-grid");
+
+  if (yonetimKutusu) {
+    onSnapshot(
+      collection(db, "yonetim"),
+      (snapshot) => {
+        const yoneticiler = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+          }))
+          .sort(
+            (a, b) =>
+              (a.sira || 99) -
+              (b.sira || 99)
+          );
+
+        yonetimKutusu.innerHTML = "";
+
+        yoneticiler.forEach((kisi) => {
+          yonetimKutusu.innerHTML += `
+            <div class="manager-card">
+
+              <img
+                src="${kisi.foto || ""}"
+                alt="${kisi.ad || "Lider Büro-Sen Yönetimi"}"
+              >
+
+              <div class="manager-info">
+                <h3>${kisi.ad || ""}</h3>
+                <p>${kisi.gorev || ""}</p>
+              </div>
+
+            </div>
+          `;
+        });
+
+        if (yoneticiler.length === 0) {
+          yonetimKutusu.innerHTML = `
+            <div class="manager-card">
+              <div class="manager-info">
+                <h3>Yönetim bilgileri hazırlanıyor</h3>
+                <p>Lider Büro-Sen</p>
+              </div>
+            </div>
+          `;
+        }
+      },
+      (error) => {
+        yonetimKutusu.innerHTML = `
+          <div class="manager-card">
+            <div class="manager-info">
+              <h3>Yönetim bilgileri yüklenemedi</h3>
+              <p>${error.message}</p>
+            </div>
+          </div>
+        `;
+      }
+    );
+  }
 })();
