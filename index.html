@@ -37,8 +37,6 @@
       margin: auto;
     }
 
-    /* ÜST ALAN */
-
     .topbar {
       background: #8b1118;
       color: white;
@@ -114,8 +112,6 @@
       border-radius: 6px;
     }
 
-    /* ANA KAPAK */
-
     .hero {
       min-height: 570px;
       display: flex;
@@ -178,8 +174,6 @@
       color: white;
     }
 
-    /* ORTAK */
-
     section {
       padding: 75px 0;
     }
@@ -202,8 +196,6 @@
       margin: 8px 0 12px;
       color: #222;
     }
-
-    /* SENDİKA */
 
     .about {
       background: white;
@@ -233,8 +225,6 @@
       font-size: 28px;
       margin-top: 0;
     }
-
-    /* HIZLI İŞLEMLER */
 
     .quick {
       padding: 0;
@@ -267,8 +257,6 @@
       font-size: 18px;
       margin-bottom: 5px;
     }
-
-    /* HABERLER */
 
     #haberler {
       background: #f4f5f6;
@@ -312,8 +300,6 @@
       font-weight: 800;
     }
 
-    /* FAALİYET */
-
     .activities {
       background: white;
     }
@@ -350,7 +336,48 @@
       font-weight: 800;
     }
 
-    /* ÜYELİK */
+    .management {
+      background: #f7f7f7;
+    }
+
+    .management-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .manager-card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+      text-align: center;
+      border-top: 4px solid #8b1118;
+    }
+
+    .manager-card img {
+      width: 100%;
+      height: 330px;
+      object-fit: cover;
+      display: block;
+      background: #e9ecef;
+    }
+
+    .manager-info {
+      padding: 22px 18px 24px;
+    }
+
+    .manager-info h3 {
+      margin: 0 0 6px;
+      font-size: 23px;
+      color: #222;
+    }
+
+    .manager-info p {
+      margin: 0;
+      color: #8b1118;
+      font-weight: 800;
+    }
 
     .membership {
       background: #8b1118;
@@ -368,8 +395,6 @@
       margin: 0 auto 28px;
       font-size: 18px;
     }
-
-    /* İLETİŞİM */
 
     .contact {
       background: #202124;
@@ -399,7 +424,6 @@
     }
 
     @media (max-width: 850px) {
-
       nav {
         display: none;
       }
@@ -414,7 +438,8 @@
       }
 
       #haberler .cards,
-      .activity-grid {
+      .activity-grid,
+      .management-grid {
         grid-template-columns: 1fr;
       }
 
@@ -457,6 +482,7 @@
       <a href="#sendikamiz">Sendikamız</a>
       <a href="#haberler">Haberler</a>
       <a href="#faaliyetler">Faaliyetler</a>
+      <a href="#yonetim">Yönetim</a>
       <a href="#iletisim">İletişim</a>
       <a class="uye-btn" href="#uyelik">Üye Ol</a>
     </nav>
@@ -464,21 +490,17 @@
   </div>
 </header>
 
-
 <main>
 
 <section class="hero" id="anasayfa">
   <div class="container">
-
     <div class="hero-content">
 
       <div class="hero-label">
         LİDER BÜRO-SEN
       </div>
 
-      <h1>
-        Birlikte Daha Güçlüyüz
-      </h1>
+      <h1>Birlikte Daha Güçlüyüz</h1>
 
       <p>
         Çalışanların haklarını koruyan, emeğin değerini savunan,
@@ -487,24 +509,18 @@
       </p>
 
       <div class="hero-buttons">
-        <a class="btn btn-light" href="#uyelik">
-          Üye Ol
-        </a>
-
+        <a class="btn btn-light" href="#uyelik">Üye Ol</a>
         <a class="btn btn-outline" href="#sendikamiz">
           Sendikamızı Tanıyın
         </a>
       </div>
 
     </div>
-
   </div>
 </section>
 
-
 <section class="quick">
   <div class="container">
-
     <div class="quick-grid">
 
       <a class="quick-card" href="#haberler">
@@ -528,10 +544,8 @@
       </a>
 
     </div>
-
   </div>
 </section>
-
 
 <section class="about" id="sendikamiz">
   <div class="container about-grid">
@@ -559,7 +573,6 @@
     </div>
 
     <div class="about-card">
-
       <h3>Sendikal Gücümüz Üyelerimizdir</h3>
 
       <p>
@@ -571,15 +584,12 @@
         Haklarımızı birlikte savunuyor, çalışma hayatında adalet
         ve eşitlik için birlikte mücadele ediyoruz.
       </p>
-
     </div>
 
   </div>
 </section>
 
-
 <section id="haberler">
-
   <div class="container">
 
     <div class="section-title">
@@ -590,23 +600,17 @@
       </p>
     </div>
 
-    <!-- Firebase haberleri buraya otomatik gelecek -->
     <div class="cards">
-
       <article>
         <span>Yükleniyor</span>
         <h3>Haberler getiriliyor...</h3>
       </article>
-
     </div>
 
   </div>
-
 </section>
 
-
 <section class="activities" id="faaliyetler">
-
   <div class="container">
 
     <div class="section-title">
@@ -641,12 +645,54 @@
     </div>
 
   </div>
-
 </section>
 
+<section class="management" id="yonetim">
+  <div class="container">
+
+    <div class="section-title">
+      <small>Yönetimimiz</small>
+      <h2>Lider Büro-Sen Yönetimi</h2>
+      <p>
+        Çalışanın sesi, emeğin gücü için görev yapan yönetim kadromuz.
+      </p>
+    </div>
+
+    <div class="management-grid">
+
+      <div class="manager-card">
+        <img src="gorseller/fatih-demirel.jpg"
+             alt="Fatih Demirel - Lider Büro-Sen Genel Başkanı">
+        <div class="manager-info">
+          <h3>Fatih Demirel</h3>
+          <p>Genel Başkan</p>
+        </div>
+      </div>
+
+      <div class="manager-card">
+        <img src="gorseller/suat-akyol.jpg"
+             alt="Suat Akyol - Lider Büro-Sen Genel Başkan Yardımcısı">
+        <div class="manager-info">
+          <h3>Suat Akyol</h3>
+          <p>Genel Başkan Yardımcısı</p>
+        </div>
+      </div>
+
+      <div class="manager-card">
+        <img src="gorseller/muhammet-gumus.jpg"
+             alt="Muhammet Gümüş - Lider Büro-Sen Genel Sekreteri">
+        <div class="manager-info">
+          <h3>Muhammet Gümüş</h3>
+          <p>Genel Sekreter</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
 
 <section class="membership" id="uyelik">
-
   <div class="container">
 
     <h2>Gücümüze Güç Katın</h2>
@@ -662,12 +708,9 @@
     </a>
 
   </div>
-
 </section>
 
-
 <section class="contact" id="iletisim">
-
   <div class="container contact-grid">
 
     <div>
@@ -689,6 +732,7 @@
       <p><a href="#sendikamiz">Sendikamız</a></p>
       <p><a href="#haberler">Haberler</a></p>
       <p><a href="#faaliyetler">Faaliyetler</a></p>
+      <p><a href="#yonetim">Yönetim</a></p>
       <p><a href="#uyelik">Üyelik</a></p>
     </div>
 
@@ -700,11 +744,9 @@
     </div>
 
   </div>
-
 </section>
 
 </main>
-
 
 <footer>
   <div class="container">
@@ -712,8 +754,6 @@
   </div>
 </footer>
 
-
-<!-- ÇALIŞAN FIREBASE HABER SİSTEMİ -->
 <script type="module" src="script.js"></script>
 
 </body>
