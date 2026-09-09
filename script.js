@@ -23,8 +23,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  /* HABERLER */
-
+  // HABERLER
   const haberKutusu = document.querySelector("#haberler .cards");
 
   if (haberKutusu) {
@@ -118,8 +117,7 @@
     );
   }
 
-  /* YÖNETİM */
-
+  // YÖNETİM
   const yonetimKutusu =
     document.querySelector(".management-grid");
 
@@ -143,7 +141,6 @@
         yoneticiler.forEach((kisi) => {
           yonetimKutusu.innerHTML += `
             <div class="manager-card">
-
               <img
                 src="${kisi.foto || ""}"
                 alt="${kisi.ad || "Lider Büro-Sen Yönetimi"}"
@@ -153,7 +150,6 @@
                 <h3>${kisi.ad || ""}</h3>
                 <p>${kisi.gorev || ""}</p>
               </div>
-
             </div>
           `;
         });
