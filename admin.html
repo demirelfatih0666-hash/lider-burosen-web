@@ -7,9 +7,7 @@
 <title>Lider Büro-Sen | Yönetim Paneli</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+* { box-sizing:border-box; }
 
 body{
   margin:0;
@@ -43,8 +41,7 @@ h2{
   color:#8b1118;
 }
 
-input,
-button{
+input,button{
   width:100%;
   padding:13px;
   margin-top:10px;
@@ -109,8 +106,15 @@ button:hover{
   font-weight:bold;
 }
 
-@media(max-width:650px){
+.bilgi{
+  background:#fff3cd;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:20px;
+  line-height:1.5;
+}
 
+@media(max-width:650px){
   .yonetici{
     grid-template-columns:80px 1fr;
   }
@@ -126,7 +130,6 @@ button:hover{
   }
 }
 </style>
-
 </head>
 
 <body>
@@ -160,8 +163,14 @@ Giriş Yap
 
 </div>
 
-
 <div id="panel">
+
+<div class="bilgi">
+<strong>Fotoğraf kullanımı:</strong><br>
+Fotoğrafı önce GitHub deposuna yükleyin.
+Daha sonra aşağıdaki Fotoğraf Dosya Adı bölümüne
+örneğin <strong>fatih.jpeg</strong> yazın.
+</div>
 
 <div class="card">
 
@@ -182,15 +191,10 @@ type="number"
 id="sira"
 placeholder="Sıra (1, 2, 3...)">
 
-<label>
-<br>
-Fotoğraf
-</label>
-
 <input
-type="file"
+type="text"
 id="foto"
-accept="image/*">
+placeholder="Fotoğraf dosya adı (örnek: fatih.jpeg)">
 
 <button id="kaydetBtn">
 Yönetici Ekle
@@ -199,7 +203,6 @@ Yönetici Ekle
 <div class="mesaj" id="kayitMesaj"></div>
 
 </div>
-
 
 <div class="card">
 
@@ -211,374 +214,265 @@ Yükleniyor...
 
 </div>
 
-
 <button
 class="logout"
 id="cikisBtn">
-
 Çıkış Yap
-
 </button>
 
 </div>
 
 </div>
 
-
 <script type="module">
 
 import {
-initializeApp
+  initializeApp
 }
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 import {
-getAuth,
-signInWithEmailAndPassword,
-signOut,
-onAuthStateChanged
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 }
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-deleteDoc,
-doc,
-onSnapshot,
-serverTimestamp
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  serverTimestamp
 }
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-import {
-getStorage,
-ref,
-uploadBytes,
-getDownloadURL
-}
-from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
-
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
-
-apiKey:
-"AIzaSyCyDO-VfmmLRrc1KS8SaVcaIR94pnc5M4g",
-
-authDomain:
-"lider-burosen-web.firebaseapp.com",
-
-projectId:
-"lider-burosen-web",
-
-storageBucket:
-"lider-burosen-web.firebasestorage.app",
-
-messagingSenderId:
-"883869377747",
-
-appId:
-"1:883869377747:web:90AE255db06aad942FA026"
-
+  apiKey: "AIzaSyCyDO-VfmmLRrc1KS8SaVcaIR94pnc5M4g",
+  authDomain: "lider-burosen-web.firebaseapp.com",
+  projectId: "lider-burosen-web",
+  storageBucket: "lider-burosen-web.firebasestorage.app",
+  messagingSenderId: "883869377747",
+  appId: "1:883869377747:web:90AE255db06aad942FA026"
 };
-
 
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
-const storage = getStorage(app);
-
-
-const login =
-document.getElementById("login");
-
-const panel =
-document.getElementById("panel");
-
-const loginMesaj =
-document.getElementById("loginMesaj");
-
-const kayitMesaj =
-document.getElementById("kayitMesaj");
-
-
+const login = document.getElementById("login");
+const panel = document.getElementById("panel");
+const loginMesaj = document.getElementById("loginMesaj");
+const kayitMesaj = document.getElementById("kayitMesaj");
 
 document
 .getElementById("girisBtn")
 .addEventListener("click", async () => {
 
-const email =
-document.getElementById("email").value.trim();
+  const email =
+    document.getElementById("email").value.trim();
 
-const password =
-document.getElementById("password").value;
+  const password =
+    document.getElementById("password").value;
 
-try{
+  try {
 
-await signInWithEmailAndPassword(
-auth,
-email,
-password
-);
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-loginMesaj.innerText =
-"Giriş başarılı.";
+    loginMesaj.innerText =
+      "Giriş başarılı.";
 
-}catch(error){
+  } catch(error) {
 
-loginMesaj.innerText =
-"Giriş başarısız: " + error.message;
+    loginMesaj.innerText =
+      "Giriş başarısız: " + error.message;
 
-}
+  }
 
 });
-
 
 document
 .getElementById("cikisBtn")
 .addEventListener("click", async () => {
 
-await signOut(auth);
+  await signOut(auth);
 
 });
-
 
 onAuthStateChanged(auth, (user) => {
 
-if(user){
+  if(user){
 
-login.style.display =
-"none";
+    login.style.display = "none";
+    panel.style.display = "block";
 
-panel.style.display =
-"block";
+  } else {
 
-}else{
+    login.style.display = "block";
+    panel.style.display = "none";
 
-login.style.display =
-"block";
-
-panel.style.display =
-"none";
-
-}
+  }
 
 });
-
 
 document
 .getElementById("kaydetBtn")
 .addEventListener("click", async () => {
 
-const ad =
-document.getElementById("ad").value.trim();
+  const ad =
+    document.getElementById("ad").value.trim();
 
-const gorev =
-document.getElementById("gorev").value.trim();
+  const gorev =
+    document.getElementById("gorev").value.trim();
 
-const sira =
-Number(
-document.getElementById("sira").value
-) || 99;
+  const sira =
+    Number(
+      document.getElementById("sira").value
+    ) || 99;
 
-const fotoDosyasi =
-document.getElementById("foto").files[0];
+  const foto =
+    document.getElementById("foto").value.trim();
 
+  if(!ad || !gorev || !foto){
 
-if(!ad || !gorev || !fotoDosyasi){
+    kayitMesaj.innerText =
+      "Ad, görev ve fotoğraf dosya adı zorunludur.";
 
-kayitMesaj.innerText =
-"Ad, görev ve fotoğraf zorunludur.";
+    return;
 
-return;
+  }
 
-}
+  try {
 
+    kayitMesaj.innerText =
+      "Kaydediliyor...";
 
-try{
+    await addDoc(
+      collection(db,"yonetim"),
+      {
+        ad:ad,
+        gorev:gorev,
+        foto:foto,
+        sira:sira,
+        createdAt:serverTimestamp()
+      }
+    );
 
-kayitMesaj.innerText =
-"Fotoğraf yükleniyor...";
+    document.getElementById("ad").value = "";
+    document.getElementById("gorev").value = "";
+    document.getElementById("sira").value = "";
+    document.getElementById("foto").value = "";
 
+    kayitMesaj.innerText =
+      "Yönetici başarıyla eklendi.";
 
-const dosyaAdi =
-Date.now() + "-" + fotoDosyasi.name;
+  } catch(error) {
 
+    kayitMesaj.innerText =
+      "Hata: " + error.message;
 
-const fotoRef =
-ref(
-storage,
-"yonetim/" + dosyaAdi
-);
-
-
-await uploadBytes(
-fotoRef,
-fotoDosyasi
-);
-
-
-const fotoURL =
-await getDownloadURL(fotoRef);
-
-
-await addDoc(
-collection(db,"yonetim"),
-{
-
-ad:ad,
-
-gorev:gorev,
-
-foto:fotoURL,
-
-sira:sira,
-
-createdAt:
-serverTimestamp()
-
-}
-);
-
-
-document.getElementById("ad").value = "";
-
-document.getElementById("gorev").value = "";
-
-document.getElementById("sira").value = "";
-
-document.getElementById("foto").value = "";
-
-
-kayitMesaj.innerText =
-"Yönetici başarıyla eklendi.";
-
-}catch(error){
-
-kayitMesaj.innerText =
-"Hata: " + error.message;
-
-}
+  }
 
 });
-
 
 const liste =
-document.getElementById("yonetimListe");
-
+  document.getElementById("yonetimListe");
 
 onSnapshot(
-collection(db,"yonetim"),
-(snapshot) => {
+  collection(db,"yonetim"),
+  (snapshot) => {
 
-const yoneticiler =
-snapshot.docs
-.map(item => ({
+    const yoneticiler =
+      snapshot.docs
+      .map(item => ({
+        id:item.id,
+        ...item.data()
+      }))
+      .sort(
+        (a,b) =>
+        (a.sira || 99) -
+        (b.sira || 99)
+      );
 
-id:item.id,
+    liste.innerHTML = "";
 
-...item.data()
+    yoneticiler.forEach((kisi) => {
 
-}))
-.sort(
-(a,b) =>
-(a.sira || 99) -
-(b.sira || 99)
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "yonetici";
+
+      div.innerHTML = `
+
+        <img
+        src="${kisi.foto}"
+        alt="${kisi.ad}">
+
+        <div>
+          <h3>${kisi.ad}</h3>
+          <p>${kisi.gorev}</p>
+          <small>${kisi.foto}</small>
+        </div>
+
+        <button
+        class="sil"
+        data-id="${kisi.id}">
+        Sil
+        </button>
+
+      `;
+
+      liste.appendChild(div);
+
+    });
+
+    document
+    .querySelectorAll(".sil")
+    .forEach((button) => {
+
+      button.addEventListener(
+        "click",
+        async () => {
+
+          const id =
+            button.dataset.id;
+
+          if(
+            confirm(
+              "Bu yöneticiyi silmek istediğinize emin misiniz?"
+            )
+          ){
+
+            await deleteDoc(
+              doc(db,"yonetim",id)
+            );
+
+          }
+
+        }
+      );
+
+    });
+
+    if(yoneticiler.length === 0){
+
+      liste.innerHTML =
+        "Henüz yönetici eklenmemiş.";
+
+    }
+
+  }
 );
-
-
-liste.innerHTML = "";
-
-
-yoneticiler.forEach((kisi) => {
-
-const div =
-document.createElement("div");
-
-div.className =
-"yonetici";
-
-
-div.innerHTML = `
-
-<img
-src="${kisi.foto}"
-alt="${kisi.ad}">
-
-<div>
-
-<h3>
-${kisi.ad}
-</h3>
-
-<p>
-${kisi.gorev}
-</p>
-
-</div>
-
-<button
-class="sil"
-data-id="${kisi.id}">
-
-Sil
-
-</button>
-
-`;
-
-
-liste.appendChild(div);
-
-});
-
-
-document
-.querySelectorAll(".sil")
-.forEach((button) => {
-
-button.addEventListener(
-"click",
-async () => {
-
-const id =
-button.dataset.id;
-
-if(
-confirm(
-"Bu yöneticiyi silmek istediğinize emin misiniz?"
-)
-){
-
-await deleteDoc(
-doc(db,"yonetim",id)
-);
-
-}
-
-});
-
-});
-
-
-if(yoneticiler.length === 0){
-
-liste.innerHTML =
-"Henüz yönetici eklenmemiş.";
-
-}
-
-});
 
 </script>
 
