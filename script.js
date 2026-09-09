@@ -15,7 +15,6 @@
     apiKey: "AIzaSyCyDO-VfmmLRrc1KS8SaVcaIR94pnc5M4g",
     authDomain: "lider-burosen-web.firebaseapp.com",
     projectId: "lider-burosen-web",
-    storageBucket: "lider-burosen-web.firebasestorage.app",
     messagingSenderId: "883869377747",
     appId: "1:883869377747:web:90AE255db06aad942FA026"
   };
@@ -23,24 +22,30 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // HABERLER
+  /* HABERLER */
+
   const haberKutusu = document.querySelector("#haberler .cards");
 
   if (haberKutusu) {
     onSnapshot(
       collection(db, "icerikler"),
+
       (snapshot) => {
+
         const haberler = snapshot.docs
           .map((doc) => ({
             id: doc.id,
             ...doc.data()
           }))
+
           .filter(
             (haber) =>
               haber["Yayınlandı"] === true ||
               haber.published === true
           )
+
           .sort((a, b) => {
+
             const tarihA =
               a["oluşturulduAt"]?.toMillis?.() ||
               a.createdAt?.toMillis?.() ||
@@ -57,6 +62,7 @@
         haberKutusu.innerHTML = "";
 
         haberler.slice(0, 6).forEach((haber) => {
+
           const tip =
             haber["Tip"] ||
             haber.type ||
@@ -78,9 +84,10 @@
             haber["oluşturulduAt"] ||
             haber.createdAt;
 
-          const tarih = zaman?.toDate
-            ? zaman.toDate().toLocaleDateString("tr-TR")
-            : "";
+          const tarih =
+            zaman?.toDate
+              ? zaman.toDate().toLocaleDateString("tr-TR")
+              : "";
 
           haberKutusu.innerHTML += `
             <article>
@@ -97,6 +104,7 @@
         });
 
         if (haberler.length === 0) {
+
           haberKutusu.innerHTML = `
             <article>
               <span>Bilgi</span>
@@ -105,7 +113,9 @@
           `;
         }
       },
+
       (error) => {
+
         haberKutusu.innerHTML = `
           <article>
             <span>Hata</span>
@@ -117,19 +127,25 @@
     );
   }
 
-  // YÖNETİM
+
+  /* YÖNETİM */
+
   const yonetimKutusu =
     document.querySelector(".management-grid");
 
   if (yonetimKutusu) {
+
     onSnapshot(
       collection(db, "yonetim"),
+
       (snapshot) => {
+
         const yoneticiler = snapshot.docs
           .map((doc) => ({
             id: doc.id,
             ...doc.data()
           }))
+
           .sort(
             (a, b) =>
               (a.sira || 99) -
@@ -139,42 +155,77 @@
         yonetimKutusu.innerHTML = "";
 
         yoneticiler.forEach((kisi) => {
+
+          const foto =
+            kisi.foto || "";
+
           yonetimKutusu.innerHTML += `
             <div class="manager-card">
+
               <img
-                src="${kisi.foto || ""}"
+                src="${foto}"
                 alt="${kisi.ad || "Lider Büro-Sen Yönetimi"}"
               >
 
               <div class="manager-info">
-                <h3>${kisi.ad || ""}</h3>
-                <p>${kisi.gorev || ""}</p>
+
+                <h3>
+                  ${kisi.ad || ""}
+                </h3>
+
+                <p>
+                  ${kisi.gorev || ""}
+                </p>
+
               </div>
+
             </div>
           `;
         });
 
         if (yoneticiler.length === 0) {
+
           yonetimKutusu.innerHTML = `
             <div class="manager-card">
+
               <div class="manager-info">
-                <h3>Yönetim bilgileri hazırlanıyor</h3>
-                <p>Lider Büro-Sen</p>
+
+                <h3>
+                  Yönetim bilgileri hazırlanıyor
+                </h3>
+
+                <p>
+                  Lider Büro-Sen
+                </p>
+
               </div>
+
             </div>
           `;
         }
       },
+
       (error) => {
+
         yonetimKutusu.innerHTML = `
           <div class="manager-card">
+
             <div class="manager-info">
-              <h3>Yönetim bilgileri yüklenemedi</h3>
-              <p>${error.message}</p>
+
+              <h3>
+                Yönetim bilgileri yüklenemedi
+              </h3>
+
+              <p>
+                ${error.message}
+              </p>
+
             </div>
+
           </div>
         `;
       }
     );
   }
+
 })();
